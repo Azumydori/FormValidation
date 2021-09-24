@@ -1,133 +1,107 @@
 import "bootstrap";
 import "./style.css";
 
+//Variables
 const CARDNUMBER = document.querySelector("#cardNumber");
-const CVC = document.querySelector("#CVC");
+const CVC = document.querySelector("#cardCVC");
 const AMOUNT = document.querySelector("#amount");
-
-const FIRSTNAME = document.querySelector("#firstName");
-const LASTNAME = document.querySelector("#lastName");
-
+const FIRSTNAME = document.querySelector("#fname");
+const LASTNAME = document.querySelector("#lname");
 const CITY = document.querySelector("#city");
-const POSTALCODE = document.querySelector("#postalCode");
-const STATE = document.querySelector("#inputState");
-const SEND = document.querySelector("#sendForm");
+const STATE = document.querySelector("#state");
+const POSTALCODE = document.querySelector("#postal");
 
 window.onload = () => {
-  SEND.addEventListener("submit", event => {
+  sendButton();
+  isValidNumber(CARDNUMBER);
+  isValidNumber(CVC);
+  isValidNumber(AMOUNT);
+  isValidText(FIRSTNAME);
+  isValidText(LASTNAME);
+  isValidText(CITY);
+  isValidText(STATE);
+  isValidNumber(POSTALCODE);
+};
+
+const isValidText = element => {
+  element.addEventListener("input", event => {
+    checkOnlyText(element.value) ? validInput(element) : invalidInput(element);
+  });
+};
+
+const isValidNumber = element => {
+  element.addEventListener("input", event => {
+    checkOnlyNumber(element.value)
+      ? validInput(element)
+      : invalidInput(element);
+  });
+};
+
+const invalidInput = input => {
+  input.style.background = "";
+  input.classList.remove("is-valid");
+  input.classList.add("is-invalid");
+};
+const validInput = input => {
+  input.style.background = "";
+  input.classList.remove("is-invalid");
+  input.classList.add("is-valid");
+};
+
+const checkOnlyText = text => {
+  return /^[a-zA-Z ]+$/.test(text);
+};
+const checkOnlyNumber = text => {
+  return /^[0-9 ]+$/.test(text);
+};
+
+const sendButton = () => {
+  document.querySelector("#send").addEventListener("click", event => {
     event.preventDefault();
-  });
-  checkName(FIRSTNAME);
-  checkLName(LASTNAME);
-  checkAmount(AMOUNT);
-  checkCVC(CVC);
-  checkCity(CITY);
-  checkState(STATE);
-  checkPostalCode(POSTALCODE);
-  checkCreditCardNumber(CARDNUMBER);
-};
 
-const isString = text => {
-  return /^[a-zA-Z]+$/.test(text);
-};
-const isNumber = text => {
-  return /^[0-9]+$/.test(text);
-};
-
-const VALIDINPUT = event => {
-  event.classList.remove("is-invalid");
-  event.classList.add("is-valid");
-};
-const INVALIDINPUT = event => {
-  event.classList.remove("is-valid");
-  event.classList.add("is-invalid");
-};
-
-const checkName = () => {
-  FIRSTNAME.addEventListener("focusout", event => {
-    if (isString(FIRSTNAME.value)) {
-      return VALIDINPUT(FIRSTNAME);
-    } else {
-      return INVALIDINPUT(FIRSTNAME);
-    }
-  });
-};
-
-const checkLName = element => {
-  element.addEventListener("focusout", event => {
-    if (isString(LASTNAME.value)) {
-      return VALIDINPUT(LASTNAME);
-    } else {
-      return INVALIDINPUT(LASTNAME);
-    }
-  });
-};
-
-const checkAmount = element => {
-  AMOUNT.addEventListener("focusout", event => {
-    if (isNumber(AMOUNT.value) && AMOUNT.value > 0) {
-      return VALIDINPUT(AMOUNT);
-    } else {
-      return INVALIDINPUT(AMOUNT);
-    }
-  });
-};
-
-const checkCVC = () => {
-  CVC.addEventListener("focusout", event => {
     if (
-      (isNumber(CVC.value) && CVC.value.length <= 3) ||
-      (CVC.value.length <= 4 && CVC > 0)
+      CARDNUMBER.value == "" ||
+      CVC.value == "" ||
+      AMOUNT.value == "" ||
+      FIRSTNAME.value == "" ||
+      LASTNAME.value == "" ||
+      CITY.value == "" ||
+      STATE.value == "" ||
+      POSTALCODE.value == ""
     ) {
-      return VALIDINPUT(CVC);
-    } else {
-      return INVALIDINPUT(CVC);
+      let alert = document.createElement("div");
+      let alertMessage = document.querySelector("#alert");
+      if (alertMessage.innerHTML != "") {
+        alertMessage.removeChild(alertMessage.firstChild);
+      }
+      alert.innerHTML = "You should fill up what you left empty";
+      alert.classList.add("alert", "alert-danger", "border-danger");
+      alert.id = "alert";
+      alertMessage.appendChild(alert);
     }
-  });
-};
-
-const checkPostalCode = () => {
-  POSTALCODE.addEventListener("focusout", event => {
-    if (
-      (isNumber(POSTALCODE.value) && POSTALCODE.value.length == 5) ||
-      POSTALCODE.value.length == 10
-    ) {
-      return VALIDINPUT(POSTALCODE);
-    } else {
-      return INVALIDINPUT(POSTALCODE);
+    if (CARDNUMBER.value == "") {
+      CARDNUMBER.style.background = "#fcb6bb";
     }
-  });
-};
-
-const checkCity = () => {
-  CITY.addEventListener("focusout", event => {
-    if (isString(CITY.value)) {
-      return VALIDINPUT(CITY);
-    } else {
-      return INVALIDINPUT(CITY);
+    if (CVC.value == "") {
+      CVC.style.background = "#fcb6bb";
     }
-  });
-};
-
-const checkState = () => {
-  STATE.addEventListener("focusout", event => {
-    if (isString(STATE.value)) {
-      return VALIDINPUT(STATE);
-    } else {
-      return INVALIDINPUT(STATE);
+    if (AMOUNT.value == "") {
+      AMOUNT.style.background = "#fcb6bb";
     }
-  });
-};
-
-const checkCreditCardNumber = () => {
-  CARDNUMBER.addEventListener("focusout", event => {
-    if (
-      (isNumber(CARDNUMBER.value) && CARDNUMBER.value.length <= 16) ||
-      CARDNUMBER.value.length == 19
-    ) {
-      return VALIDINPUT(CARDNUMBER);
-    } else {
-      return INVALIDINPUT(CARDNUMBER);
+    if (FIRSTNAME.value == "") {
+      FIRSTNAME.style.background = "#fcb6bb";
+    }
+    if (LASTNAME.value == "") {
+      LASTNAME.style.background = "#fcb6bb";
+    }
+    if (CITY.value == "") {
+      CITY.style.background = "#fcb6bb";
+    }
+    if (STATE.value == "") {
+      STATE.style.background = "#fcb6bb";
+    }
+    if (POSTALCODE.value == "") {
+      POSTALCODE.style.background = "#fcb6bb";
     }
   });
 };
